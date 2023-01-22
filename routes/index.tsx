@@ -1,5 +1,7 @@
 import { Head } from "$fresh/runtime.ts";
-import Counter from "../islands/Counter.tsx";
+
+// Components
+import Calculator from "../islands/Calculator.tsx";
 
 export default function Home() {
   return (
@@ -7,9 +9,9 @@ export default function Home() {
       <Head>
         <title>Deno Calc with fresh</title>
       </Head>
-      <div>
-        <Counter start={3} />
-      </div>
+      <main class="w-screen h-screen flex justify-center items-center">
+        <Calculator />
+      </main>
     </>
   );
 }
