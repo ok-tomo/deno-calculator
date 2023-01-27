@@ -2,10 +2,11 @@ import { JSX } from "preact/jsx-runtime";
 import { useMemo, useState } from "preact/hooks";
 
 // Components
-import { Button } from "../components/Button.tsx";
 import { Display } from "../components/Display.tsx";
+import { Button } from "../components/Button.tsx";
 
 const MAX_LENGTH_NUMBER = 13;
+const buttonStyle = "w-20 h-20 border-4 border-neutral-700";
 
 const Calculator = () => {
   const [count, setCount] = useState<string>("0");
@@ -26,34 +27,44 @@ const Calculator = () => {
   };
 
   // Numpad 0-9
-  const calcButtonsNumber = useMemo(() => {
-    return (
-      <div class={"grid grid-cols-3 gap-2"} dir={"rtl"}>
-        {[...Array(10).keys()].map((value) => {
-          const colSpan = (value === 0) ? "col-span-full " : "w-20 ";
-          return (
-            <Button
-              key={`${value}`}
-              name={`Numpad${value}`}
-              class={colSpan + "h-20 border-4 border-neutral-700"}
-              onClick={onClick}
-            >
-              {value}
-            </Button>
-          );
-        }).reverse()}
-      </div>
-    );
+  const calculatorButtons = useMemo(() => {
+    const functionButtons = ["AC", "+/-", "%"].map((f, index) => {
+      return <Button class={buttonStyle}>{f}</Button>;
+    });
+
+    const operandButtons = ["+", "-", "*", "/", "="].map((f, index) => {
+      return <Button class={buttonStyle}>{f}</Button>;
+    });
+
+    const numberButtons = [...Array(10).keys()].map((value) => {
+      const colSpan = (value === 0) ? "col-span-3" : "w-20";
+      return (
+        <Button class={colSpan + buttonStyle.slice(4)} onClick={onClick}>
+          {value}
+        </Button>
+      );
+    }).reverse();
+
+    const concatenateButtons = [
+      ...functionButtons,
+      ...numberButtons,
+    ];
+
+    operandButtons.map((btn, index) => {
+      concatenateButtons.splice(3 * (index + 1) + index, 0, btn);
+    });
+
+    console.log(concatenateButtons);
+    return <div class={"grid grid-cols-4 gap-2"}>{concatenateButtons}</div>;
   }, []);
 
-  console.log(count);
   return (
-    <div id="calculator" class={"grid grid-cols-1 gap-2"}>
+    <div id="calculator" class="grid grid-cols-1 gap-2">
       <Display
         class={"grid col-span-full h-20 border-4 border-neutral-700"}
         value={count}
       />
-      {calcButtonsNumber}
+      {calculatorButtons}
     </div>
   );
 };

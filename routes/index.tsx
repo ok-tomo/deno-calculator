@@ -12,7 +12,7 @@ export default function Home() {
         <link rel="stylesheet" href="/main.css"></link>
       </Head>
       <main class="w-screen h-screen flex justify-center items-center">
-        <SplashScreen />
+        {/* <SplashScreen /> */}
         <Calculator />
       </main>
     </>
