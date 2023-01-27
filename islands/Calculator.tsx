@@ -147,7 +147,6 @@ const Calculator = () => {
     return <div class={"grid grid-cols-4 gap-2"}>{concatenateButtons}</div>;
   };
 
-  console.log(displayValue);
   return (
     <div id="calculator" class="grid grid-cols-1 gap-2">
       <Display
