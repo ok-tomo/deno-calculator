@@ -11,7 +11,6 @@ interface valueSet {
 }
 
 const MAX_LENGTH_NUMBER = 13;
-const buttonStyle = "w-20 h-20 border-4 border-neutral-700";
 
 const Calculator = () => {
   const [displayValue, setDisplayValue] = useState<valueSet>(
@@ -21,8 +20,9 @@ const Calculator = () => {
     { value: "0", isNegative: false },
   );
   const [operand, setOperand] = useState<string | null>(null);
+  const buttonStyle = "w-20 h-20 border-4 border-neutral-700";
 
-  const onClickNumberHandler = (
+  const numberButtonClickHandler = (
     event: JSX.TargetedMouseEvent<HTMLButtonElement>,
   ) => {
     const targetValue: string = (event?.target as HTMLElement).textContent!;
@@ -38,7 +38,7 @@ const Calculator = () => {
     });
   };
 
-  const onClickEqualHandler = (
+  const equalButtonClickHandler = (
     event: JSX.TargetedMouseEvent<HTMLButtonElement>,
   ) => {
     if (operand !== null) {
@@ -61,11 +61,11 @@ const Calculator = () => {
     }
   };
 
-  const onClickOperandHandler = (
+  const operandButtonClickHandler = (
     event: JSX.TargetedMouseEvent<HTMLButtonElement>,
   ) => {
     if (operand !== null) {
-      onClickEqualHandler(event);
+      equalButtonClickHandler(event);
     } else {
       setOperand((event.target as HTMLElement).textContent!);
       setDisplayValue((preValue) => {
@@ -75,76 +75,23 @@ const Calculator = () => {
     }
   };
 
-  const allClear = () => {
+  const allClearButtonClickHandler = () => {
     setDisplayValue({ value: "0", isNegative: false });
     setBeforeValue({ value: "0", isNegative: false });
     setOperand(null);
   };
 
-  const invertPositiveNegative = () => {
+  const reverseSignsButtonClickHandler = () => {
     setDisplayValue((preValue) => {
       return { ...preValue, isNegative: !preValue.isNegative };
     });
   };
 
-  const convertPercentage = () => {
+  const percentageButtonClickHandler = () => {
     setDisplayValue((preValue) => {
       const newValue = (parseFloat(preValue.value) / 100).toString();
       return { ...preValue, value: newValue };
     });
-  };
-
-  // 電卓のボタン
-  const calculatorButtons = () => {
-    const functionButtons = [
-      { name: "AC", onClick: allClear },
-      { name: "+/-", onClick: invertPositiveNegative },
-      { name: "%", onClick: convertPercentage },
-    ].map((btn, index) => {
-      return (
-        <Button class={buttonStyle} onClick={btn.onClick}>{btn.name}</Button>
-      );
-    });
-
-    const operandButtons = [
-      {
-        name: "+",
-        onClick: (event: JSX.TargetedMouseEvent<HTMLButtonElement>) =>
-          onClickOperandHandler(event),
-      },
-      { name: "-", onClick: onClickOperandHandler },
-      { name: "*", onClick: onClickOperandHandler },
-      { name: "/", onClick: onClickOperandHandler },
-      { name: "=", onClick: onClickEqualHandler },
-    ].map((btn, index) => {
-      return (
-        <Button class={buttonStyle} onClick={btn.onClick}>{btn.name}</Button>
-      );
-    });
-
-    const numberButtons = [...Array(10).keys()].map((value) => {
-      const colSpan = (value === 0) ? "col-span-2" : "w-20";
-      return (
-        <Button
-          class={colSpan + buttonStyle.slice(4)}
-          onClick={onClickNumberHandler}
-        >
-          {value}
-        </Button>
-      );
-    }).reverse();
-
-    const concatenateButtons = [
-      ...functionButtons,
-      ...numberButtons,
-      <Button class={buttonStyle} onClick={onClickNumberHandler}>.</Button>,
-    ];
-
-    operandButtons.map((btn, index) => {
-      concatenateButtons.splice(3 * (index + 1) + index, 0, btn);
-    });
-
-    return <div class={"grid grid-cols-4 gap-2"}>{concatenateButtons}</div>;
   };
 
   return (
@@ -154,7 +101,74 @@ const Calculator = () => {
         value={displayValue.value}
         isNegative={displayValue.isNegative}
       />
-      {calculatorButtons()}
+      <div class="grid grid-cols-4 gap-2">
+        <Button class={buttonStyle} onClick={allClearButtonClickHandler}>
+          AC
+        </Button>
+        <Button class={buttonStyle} onClick={reverseSignsButtonClickHandler}>
+          +/-
+        </Button>
+        <Button class={buttonStyle} onClick={percentageButtonClickHandler}>
+          %
+        </Button>
+        <Button class={buttonStyle} onClick={operandButtonClickHandler}>
+          +
+        </Button>
+      </div>
+      <div class="grid grid-cols-4 gap-2">
+        <Button class={buttonStyle} onClick={numberButtonClickHandler}>
+          7
+        </Button>
+        <Button class={buttonStyle} onClick={numberButtonClickHandler}>
+          8
+        </Button>
+        <Button class={buttonStyle} onClick={numberButtonClickHandler}>
+          9
+        </Button>
+        <Button class={buttonStyle} onClick={operandButtonClickHandler}>
+          -
+        </Button>
+      </div>
+      <div class="grid grid-cols-4 gap-2">
+        <Button class={buttonStyle} onClick={numberButtonClickHandler}>
+          4
+        </Button>
+        <Button class={buttonStyle} onClick={numberButtonClickHandler}>
+          5
+        </Button>
+        <Button class={buttonStyle} onClick={numberButtonClickHandler}>
+          6
+        </Button>
+        <Button class={buttonStyle} onClick={operandButtonClickHandler}>
+          *
+        </Button>
+      </div>
+      <div class="grid grid-cols-4 gap-2">
+        <Button class={buttonStyle} onClick={numberButtonClickHandler}>
+          1
+        </Button>
+        <Button class={buttonStyle} onClick={numberButtonClickHandler}>
+          2
+        </Button>
+        <Button class={buttonStyle} onClick={numberButtonClickHandler}>
+          3
+        </Button>
+        <Button class={buttonStyle} onClick={operandButtonClickHandler}>
+          /
+        </Button>
+      </div>
+      <div class="grid grid-cols-4 gap-2">
+        <Button
+          class={"col-span-2" + buttonStyle.slice(4)}
+          onClick={numberButtonClickHandler}
+        >
+          0
+        </Button>
+        <Button class={buttonStyle} onClick={numberButtonClickHandler}>
+          .
+        </Button>
+        <Button class={buttonStyle} onClick={equalButtonClickHandler}>=</Button>
+      </div>
     </div>
   );
 };
