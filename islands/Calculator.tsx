@@ -10,11 +10,15 @@ interface valueSet {
   isNegative: boolean;
 }
 
+interface Props {
+  initialNumber?: string;
+}
+
 const MAX_LENGTH_NUMBER = 13;
 
-const Calculator = () => {
+const Calculator = ({ initialNumber = "0" }: Props) => {
   const [displayValue, setDisplayValue] = useState<valueSet>(
-    { value: "0", isNegative: false },
+    { value: initialNumber.toString(), isNegative: false },
   );
   const [beforeValue, setBeforeValue] = useState<valueSet>(
     { value: "0", isNegative: false },
